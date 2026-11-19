@@ -1,0 +1,13 @@
+<rss><channel>
+  <item>
+    <title>Commission publishes Data Governance Act update</title>
+    <link>https://example.test/dga-fixture</link>
+    <description><![CDATA[<p>New data intermediation guidance.</p>]]></description>
+    <pubDate>Mon, 20 Nov 2026 08:30:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Unrelated policy news</title>
+    <link>https://example.test/unrelated</link>
+    <description>Digital markets only.</description>
+  </item>
+</channel></rss>

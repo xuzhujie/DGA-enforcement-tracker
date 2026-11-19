@@ -1,0 +1,98 @@
+name: DGA official update monitor
+
+on:
+  schedule:
+    # Run outside the top-of-hour burst; 06:17 UTC is 14:17 in China Standard Time.
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dga-monitor
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Read official DGA signals
+        id: monitor
+        run: python scripts/check_updates.py
+
+      - name: Write run summary
+        if: always()
+        env:
+          COUNT: ${{ steps.monitor.outputs.count || '0' }}
+          NEW_COUNT: ${{ steps.monitor.outputs.new_count || '0' }}
+          UPDATED_COUNT: ${{ steps.monitor.outputs.updated_count || '0' }}
+          CHANGED: ${{ steps.monitor.outputs.changed || 'false' }}
+          CHANGED_ITEMS_JSON: ${{ steps.monitor.outputs.changed_items_json || '[]' }}
+        run: |
+          {
+            echo "## DGA official update monitor"
+            echo "- Schedule: daily at 06:17 UTC / 14:17 China Standard Time"
+            echo "- Feed items retained: ${COUNT}"
+            echo "- New items: ${NEW_COUNT}"
+            echo "- Updated items: ${UPDATED_COUNT}"
+            echo "- Feed changed: ${CHANGED}"
+            CHANGED_ITEMS_JSON="$CHANGED_ITEMS_JSON" python3 - <<'PY'
+          import json
+          import os
+
+          for item in json.loads(os.environ.get("CHANGED_ITEMS_JSON", "[]")):
+              title = item.get("title", "Untitled signal").replace("\n", " ").strip()
+              link = item.get("link", "").strip()
+              print(f"- [{title}]({link})" if link else f"- {title}")
+          PY
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit feed changes only
+        if: steps.monitor.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/updates.json
+          if git diff --cached --quiet; then
+            echo "No feed changes to commit"
+          else
+            git commit -m "chore: refresh DGA official update feed"
+            git push
+          fi
+
+      - name: Optional webhook notification
+        if: steps.monitor.outputs.changed == 'true' && env.NOTIFY_WEBHOOK_URL != ''
+        continue-on-error: true
+        env:
+          WEBHOOK_URL: ${{ env.NOTIFY_WEBHOOK_URL }}
+          WEBHOOK_KIND: ${{ vars.NOTIFY_WEBHOOK_KIND }}
+          NEW_COUNT: ${{ steps.monitor.outputs.new_count || '0' }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | curl --fail --silent --show-error --retry 2 --data-binary @- -H 'Content-Type: application/json' "$WEBHOOK_URL"
+          import json
+          import os
+
+          message = (
+              f"DGA 监测发现 {os.environ.get('NEW_COUNT', '0')} 条新官方动态。"
+              f"\n运行详情：{os.environ.get('RUN_URL', '')}"
+          )
+          kind = os.environ.get('WEBHOOK_KIND', '').strip().lower() or 'generic'
+          if kind == 'discord':
+              payload = {'content': message}
+          elif kind == 'feishu':
+              payload = {'msg_type': 'text', 'content': {'text': message}}
+          else:
+              payload = {'text': message}
+          print(json.dumps(payload, ensure_ascii=False))
+          PY
