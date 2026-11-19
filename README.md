@@ -63,7 +63,7 @@ python3 scripts/check_updates.py --feed-file /path/to/feed.xml --dry-run
 
 ## GitHub Pages 与通知
 
-首次部署时，在仓库 Settings → Pages → Source 选择 **GitHub Actions**。推送到 `main` 会触发构建发布；每日监测默认只写 Actions Summary 和 feed 文件。
+首次部署时，在仓库 Settings → Pages → Source 选择 **GitHub Actions**；如果 Pages 尚未启用，Actions 无法代替账号创建站点，需先完成这一步。推送到 `main` 会触发构建发布；每日监测默认只写 Actions Summary 和 feed 文件。
 
 如需通知，可配置 Actions secret `NOTIFY_WEBHOOK_URL` 与 variable `NOTIFY_WEBHOOK_KIND`（`discord`、`feishu` 或通用 JSON）。通知失败不会阻断 feed 提交。不要把 webhook 地址写进仓库。
 
