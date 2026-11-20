@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-20T15:15:20+00:00",
+  "updated_at": "2026-11-20T15:28:52+00:00",
   "source": "https://ec.europa.eu/commission/presscorner/api/rss?language=en",
   "items": [
     {
@@ -37,6 +37,12 @@
       "link": "https://digital-strategy.ec.europa.eu/en/policies/data-intermediary-services",
       "date": "",
       "summary": "The DGA creates a framework to foster a new business model – data intermediation services – that will provide a trusted and secure environment in which companies or individuals can share data."
+    },
+    {
+      "title": "National competent bodies and authorities under the Data Governance Act | Shaping Europe’s digital future",
+      "link": "https://digital-strategy.ec.europa.eu/en/library/national-competent-bodies-and-authorities-under-data-governance-act",
+      "date": "",
+      "summary": "This page makes available the national competent bodies and authorities under the Data Governance Act per country."
     }
   ]
 }
