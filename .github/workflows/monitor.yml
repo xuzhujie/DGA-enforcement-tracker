@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: dga-monitor
@@ -76,6 +77,12 @@ jobs:
             git commit -m "chore: refresh DGA official update feed"
             git push
           fi
+
+      - name: Request Pages deployment after feed changes
+        if: steps.monitor.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main
 
       - name: Optional webhook notification
         if: steps.monitor.outputs.changed == 'true' && env.NOTIFY_WEBHOOK_URL != ''

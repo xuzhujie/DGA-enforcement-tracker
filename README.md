@@ -29,7 +29,7 @@ DGA 是欧盟的数据治理横向法规，自 2023-09-24 起适用。它围绕�
 - `playwright.config.ts`、`tests/e2e/`：桌面和窄屏 Chromium 冒烟测试，验证 DGA 定义、治理基础设施、Article 31 证据边界和移动端不横向溢出。
 - `public/static/index.html`：适合分享/打印的静态速览页。
 - `.github/workflows/deploy.yml`：Node 22、单元/数据/Python 测试、桌面/窄屏浏览器冒烟、lint、构建并发布 GitHub Pages。
-- `.github/workflows/monitor.yml`：每天 UTC 06:17 运行，只有 feed 有变化时才提交 `public/data/updates.json`，并写入 Actions Summary。
+- `.github/workflows/monitor.yml`：每天 UTC 06:17 运行，只有 feed 有变化时才提交 `public/data/updates.json`，显式请求一次 Pages 发布，并写入 Actions Summary。
 
 ## 本地运行
 
@@ -73,7 +73,7 @@ python3 scripts/check_updates.py --feed-file /path/to/feed.xml --dry-run
 
 首次部署时，在仓库 Settings → Pages → Source 选择 **GitHub Actions**；如果 Pages 尚未启用，Actions 无法代替账号创建站点，需先完成这一步。推送到 `main` 会触发构建发布；每日监测默认只写 Actions Summary 和 feed 文件。
 
-要让每日 monitor 在 feed 变化时自动提交，请在 Settings → Actions → General → Workflow permissions 选择 **Read and write permissions**。启用后可在 Actions → DGA official update monitor → Run workflow 手动验证一次。
+要让每日 monitor 在 feed 变化时自动提交并请求 Pages 发布，请在 Settings → Actions → General → Workflow permissions 选择 **Read and write permissions**。启用后可在 Actions → DGA official update monitor → Run workflow 手动验证一次；monitor 成功后会调用 `deploy.yml`，避免 `GITHUB_TOKEN` 推送不再触发普通 `push` 工作流造成线上 feed 滞后。
 
 如需通知，可配置 Actions secret `NOTIFY_WEBHOOK_URL` 与 variable `NOTIFY_WEBHOOK_KIND`（`discord`、`feishu` 或通用 JSON）。通知失败不会阻断 feed 提交。不要把 webhook 地址写进仓库。
 
