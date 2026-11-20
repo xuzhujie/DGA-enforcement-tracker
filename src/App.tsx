@@ -4,6 +4,8 @@ import { AppShell, type AppTab } from './components/AppShell'
 import { DefinitionPanel } from './components/DefinitionPanel'
 import { ExportActions } from './components/ExportActions'
 import { FreshnessPanel } from './components/FreshnessPanel'
+import { FollowUpTable } from './components/FollowUpTable'
+import { GovernanceRegister } from './components/GovernanceRegister'
 import { IntermediaryTable } from './components/IntermediaryTable'
 import { MatterDrawer } from './components/MatterDrawer'
 import { MatterTable } from './components/MatterTable'
@@ -12,7 +14,7 @@ import { SourceList } from './components/SourceList'
 import { Timeline } from './components/Timeline'
 import { TransferWatch } from './components/TransferWatch'
 import { UpdatesPanel } from './components/UpdatesPanel'
-import { MATTERS, DGA_OVERVIEW, DATA_AS_OF, INTERMEDIARIES, OFFICIAL_SOURCES, TIMELINE_EVENTS, TRANSFER_WATCH } from './data/registry'
+import { AUTHORITY_SNAPSHOTS, DATA_ALTRUISM_ORGANISATIONS, DGA_OVERVIEW, DATA_AS_OF, FOLLOW_UP_REVIEWS, INTERMEDIARIES, MATTERS, OFFICIAL_SOURCES, TIMELINE_EVENTS, TRANSFER_WATCH } from './data/registry'
 import { filterIntermediaries, filterMatters, getDashboardMetrics } from './data/metrics'
 import type { DgaMatter, Language, UpdateItem } from './data/types'
 import { downloadText, exportMatterViewCsv, exportMatterViewJson, exportMatterViewMarkdown, type ExportTrack } from './lib/export'
@@ -112,6 +114,7 @@ function App() {
           <div className="section-toolbar"><div><h2>{language === 'zh' ? '实施程序事项' : 'Implementation matters'}</h2><p>{language === 'zh' ? '每个成员国一条主记录，阶段事件和来源在详情中展开。' : 'One reviewed row per Member State, with phase events and sources in the detail panel.'}</p></div><ExportActions language={language} onExport={(format) => handleExport(format, 'implementation', language, filters, filteredMatters, INTERMEDIARIES, TRANSFER_WATCH)} /></div>
           <MatterTable language={language} matters={filteredMatters} onSelectMatter={setSelectedMatter} />
           <MatterDrawer language={language} matter={selectedMatter} onClose={() => setSelectedMatter(null)} />
+          <FollowUpTable language={language} reviews={FOLLOW_UP_REVIEWS} />
         </>
       ) : activeTab === 'intermediation' ? (
         <>
@@ -123,6 +126,8 @@ function App() {
           <div className="section-toolbar"><div><h2>{language === 'zh' ? '非个人数据国际访问 / 转移' : 'International access / transfer of non-personal data'}</h2><p>{language === 'zh' ? '仅在官方来源明确指向 DGA Article 31 的具体行动或决定时定位个案。' : 'Locate a case only when an official source expressly ties a concrete action or decision to DGA Article 31.'}</p></div><ExportActions language={language} onExport={(format) => handleExport(format, 'article31', language, filters, filteredMatters, INTERMEDIARIES, TRANSFER_WATCH)} /></div>
           <TransferWatch language={language} items={TRANSFER_WATCH} />
         </>
+      ) : activeTab === 'governance' ? (
+        <GovernanceRegister language={language} authorities={AUTHORITY_SNAPSHOTS} organisations={DATA_ALTRUISM_ORGANISATIONS} />
       ) : activeTab === 'timeline' ? (
         <Timeline language={language} events={TIMELINE_EVENTS} />
       ) : activeTab === 'sources' ? (

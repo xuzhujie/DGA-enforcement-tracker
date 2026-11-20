@@ -3,7 +3,7 @@ import { FilterBar } from './FilterBar'
 import { TopNav } from './TopNav'
 import type { CountryRef, Language, MatterFilters } from '../data/types'
 
-export type AppTab = 'dashboard' | 'implementation' | 'intermediation' | 'article31' | 'timeline' | 'sources'
+export type AppTab = 'dashboard' | 'implementation' | 'intermediation' | 'article31' | 'governance' | 'timeline' | 'sources'
 
 interface AppShellProps {
   language: Language

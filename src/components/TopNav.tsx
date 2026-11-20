@@ -2,6 +2,7 @@ import {
   BookOpen,
   CalendarDays,
   Database,
+  Building2,
   LayoutDashboard,
   ListChecks,
   ShieldAlert,
@@ -20,6 +21,7 @@ const tabs: Array<{ key: AppTab; icon: typeof LayoutDashboard; zh: string; en: s
   { key: 'implementation', icon: ListChecks, zh: '实施程序', en: 'Implementation' },
   { key: 'intermediation', icon: Database, zh: '数据中介', en: 'Data intermediation' },
   { key: 'article31', icon: ShieldAlert, zh: '非个人数据出境', en: 'Article 31' },
+  { key: 'governance', icon: Building2, zh: '治理基础设施', en: 'Governance' },
   { key: 'timeline', icon: CalendarDays, zh: '时间线', en: 'Timeline' },
   { key: 'sources', icon: BookOpen, zh: '来源', en: 'Sources' },
 ]
