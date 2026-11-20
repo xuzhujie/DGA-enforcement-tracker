@@ -71,9 +71,9 @@ python3 scripts/check_updates.py --feed-file /path/to/feed.xml --dry-run
 
 ## GitHub Pages 与通知
 
-首次部署时，在仓库 Settings → Pages → Source 选择 **GitHub Actions**；如果 Pages 尚未启用，Actions 无法代替账号创建站点，需先完成这一步。推送到 `main` 会触发构建发布；每日监测默认只写 Actions Summary 和 feed 文件。
+首次部署时，在仓库 Settings → Pages → Source 选择 **GitHub Actions**；如果 Pages 尚未启用，Actions 无法代替账号创建站点，需先完成这一步。推送到 `main` 会触发构建发布；每日监测会写 Actions Summary，feed 变化时提交 feed 并请求一次 Pages 发布。
 
-要让每日 monitor 在 feed 变化时自动提交并请求 Pages 发布，请在 Settings → Actions → General → Workflow permissions 选择 **Read and write permissions**。启用后可在 Actions → DGA official update monitor → Run workflow 手动验证一次；monitor 成功后会调用 `deploy.yml`，避免 `GITHUB_TOKEN` 推送不再触发普通 `push` 工作流造成线上 feed 滞后。
+monitor workflow 已在 YAML 中声明最小范围的 `contents: write` 与 `actions: write`，用于提交 `public/data/updates.json` 并请求 Pages 发布；本仓库已在默认 **Read repository contents and packages permissions** 设置下验证成功，因此不需要扩大仓库级默认权限。可在 Actions → DGA official update monitor → Run workflow 手动验证；monitor 成功后会调用 `deploy.yml`，避免 `GITHUB_TOKEN` 推送不再触发普通 `push` 工作流造成线上 feed 滞后。
 
 如需通知，可配置 Actions secret `NOTIFY_WEBHOOK_URL` 与 variable `NOTIFY_WEBHOOK_KIND`（`discord`、`feishu` 或通用 JSON）。通知失败不会阻断 feed 提交。不要把 webhook 地址写进仓库。
 
