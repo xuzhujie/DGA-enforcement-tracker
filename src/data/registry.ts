@@ -1,12 +1,15 @@
 import type {
+  AuthoritySnapshot,
   Bilingual,
   CountryRef,
+  DataAltruismOrganisation,
   DgaMatter,
   DgaOverview,
   IntermediaryRecord,
   MatterEvent,
   NonPersonalTransferWatch,
   OfficialSource,
+  ProcedureFollowUp,
   SourceRef,
   TimelineEvent,
 } from './types'
@@ -19,6 +22,7 @@ const sourceUrls = {
   explained: 'https://digital-strategy.ec.europa.eu/en/policies/data-governance-act-explained',
   authorities: 'https://digital-strategy.ec.europa.eu/en/library/national-competent-bodies-and-authorities-under-data-governance-act',
   register: 'https://digital-strategy.ec.europa.eu/en/policies/data-intermediary-services',
+  altruismRegister: 'https://digital-strategy.ec.europa.eu/en/policies/data-altruism-organisations',
   formalNotice18: 'https://digital-strategy.ec.europa.eu/en/news/commission-calls-18-member-states-comply-eu-data-governance-act',
   reasonedOpinion10: 'https://digital-strategy.ec.europa.eu/en/news/commission-calls-10-member-states-comply-data-governance-act',
   ireland: 'https://digital-strategy.ec.europa.eu/en/news/commission-calls-ireland-comply-eu-data-governance-act',
@@ -31,6 +35,7 @@ const sourceLabels: Record<keyof typeof sourceUrls, Bilingual> = {
   explained: { zh: '欧委会：Data Governance Act explained', en: 'Commission: Data Governance Act explained' },
   authorities: { zh: '欧委会：DGA 国家主管机关清单', en: 'Commission: national DGA authorities' },
   register: { zh: '欧委会：数据中介服务登记册', en: 'Commission: EU register of data intermediation services' },
+  altruismRegister: { zh: '欧委会：数据利他组织登记册', en: 'Commission: EU register of recognised data altruism organisations' },
   formalNotice18: { zh: '欧委会：18 个成员国 formal notice', en: 'Commission: formal notice to 18 Member States' },
   reasonedOpinion10: { zh: '欧委会：10 个成员国 reasoned opinion', en: 'Commission: reasoned opinion to 10 Member States' },
   ireland: { zh: '欧委会：爱尔兰 DGA formal notice', en: 'Commission: Ireland DGA formal notice' },
@@ -57,6 +62,10 @@ const sourceSnapshots: Record<keyof typeof sourceUrls, Bilingual> = {
   register: {
     zh: '欧委会公开数据中介服务登记册及成员国通知名单。',
     en: 'Commission public register and Member State notifications for data intermediation services.',
+  },
+  altruismRegister: {
+    zh: '欧委会公开的已获认可数据利他组织登记册；页面按成员国列出通知记录。',
+    en: 'Commission public register of recognised data altruism organisations, listing Member State notifications.',
   },
   formalNotice18: {
     zh: '2024-05-23：18 个成员国因主管机关指定/授权问题收到 formal notice。',
@@ -95,7 +104,7 @@ const sourceRefs = Object.fromEntries(
 ) as Record<keyof typeof sourceUrls, SourceRef>
 
 export const OFFICIAL_SOURCES: OfficialSource[] = [
-  ...(['law', 'lawSummary', 'explained', 'authorities', 'register', 'formalNotice18', 'reasonedOpinion10', 'ireland', 'evaluation'] as const).map((id) => ({
+  ...(['law', 'lawSummary', 'explained', 'authorities', 'register', 'altruismRegister', 'formalNotice18', 'reasonedOpinion10', 'ireland', 'evaluation'] as const).map((id) => ({
     id,
     label: sourceLabels[id],
     url: sourceUrls[id],
@@ -111,9 +120,11 @@ function country(code: string, flag: string, zh: string, en: string): CountryRef
 const countries: Record<string, CountryRef> = {
   AT: country('AT', '🇦🇹', '奥地利', 'Austria'),
   BE: country('BE', '🇧🇪', '比利时', 'Belgium'),
+  BG: country('BG', '🇧🇬', '保加利亚', 'Bulgaria'),
   CY: country('CY', '🇨🇾', '塞浦路斯', 'Cyprus'),
   CZ: country('CZ', '🇨🇿', '捷克', 'Czechia'),
   DE: country('DE', '🇩🇪', '德国', 'Germany'),
+  DK: country('DK', '🇩🇰', '丹麦', 'Denmark'),
   EE: country('EE', '🇪🇪', '爱沙尼亚', 'Estonia'),
   EL: country('EL', '🇬🇷', '希腊', 'Greece'),
   ES: country('ES', '🇪🇸', '西班牙', 'Spain'),
@@ -133,6 +144,7 @@ const countries: Record<string, CountryRef> = {
   SE: country('SE', '🇸🇪', '瑞典', 'Sweden'),
   SI: country('SI', '🇸🇮', '斯洛文尼亚', 'Slovenia'),
   SK: country('SK', '🇸🇰', '斯洛伐克', 'Slovakia'),
+  HR: country('HR', '🇭🇷', '克罗地亚', 'Croatia'),
 }
 
 const reasonedOpinionCodes = new Set(['CZ', 'DE', 'EE', 'EL', 'CY', 'LU', 'AT', 'PL', 'PT', 'SI'])
@@ -274,6 +286,126 @@ export const INTERMEDIARIES: IntermediaryRecord[] = registryProviderNames.flatMa
   last_verified_at: DATA_AS_OF,
 })))
 
+const authoritySource = sourceRefs.authorities
+const altruismSource = sourceRefs.altruismRegister
+const authoritySnapshotDate = '2026-09-15'
+
+function authoritySnapshot(
+  code: string,
+  competentBody: string[],
+  dataIntermediation: string[],
+  dataAltruism: string[],
+  note?: Bilingual,
+): AuthoritySnapshot {
+  return {
+    id: `authority-${code.toLowerCase()}-${authoritySnapshotDate}`,
+    country: countries[code],
+    competentBody,
+    dataIntermediation,
+    dataAltruism,
+    sourceUpdatedAt: authoritySnapshotDate,
+    note,
+    sources: [authoritySource],
+    last_verified_at: DATA_AS_OF,
+  }
+}
+
+export const AUTHORITY_SNAPSHOTS: AuthoritySnapshot[] = [
+  authoritySnapshot('AT', ['National statistics office'], ['the Chancellor'], []),
+  authoritySnapshot('BE', [
+    'The Federal Service Integrator, under the competence of the Federal Public Service Policy and Support',
+  ], ['Federal Public Service of Economy, SMEs, Self-Employed and Energy'], []),
+  authoritySnapshot('BG', [
+    'Minister of e-Government',
+    'President of the National Statistical Institute (for reuse of statistical data)',
+  ], ['Minister of e-Government'], []),
+  authoritySnapshot('HR', ['Croatian Bureau of Statistics'], ['Ministry of Justice, Public Administration and Digital Transformation'], []),
+  authoritySnapshot('CY', [], [], [], {
+    zh: '欧委会 2026-09-15 清单中未列出该成员国的主管机关名称。',
+    en: 'The Commission list updated on 15 September 2026 does not name authorities for this Member State.',
+  }),
+  authoritySnapshot('CZ', [
+    'Ministry of Labour and Social Affairs (for data on social security, employment and social policy)',
+    'Czech Statistical Office (for statistical data)',
+    'Directorate-General of Finance (for tax data)',
+    'Institute of Health Information and Statistics of the Czech Republic (for health data and statistics)',
+  ], [], []),
+  authoritySnapshot('DK', ['Statistics Denmark'], ['Agency for Digital Government'], []),
+  authoritySnapshot('EE', ['Estonian public sector information holders'], ['Estonian Data Protection Inspectorate (Andmekaitse Inspektsioon)'], [], {
+    zh: '爱沙尼亚说明：各公共部门机构就其相关领域提供咨询。',
+    en: 'Estonia notes that each public-sector body provides advice for its respective area.',
+  }),
+  authoritySnapshot('FI', [
+    'Statistics Finland',
+    'Finnish Social and Health Data Permit Authority Findata (for secondary use of Finnish transport and health-care data)',
+  ], ['Finnish Transport and Communications Agency Traficom'], []),
+  authoritySnapshot('FR', [
+    'DINUM - Direction interministérielle du numérique, placée sous l’autorité du ministre de la Transformation et de la Fonction publique',
+  ], ['ARCEP - L’Autorité de régulation des communications électroniques, des postes et de la distribution de la presse'], [
+    'CNIL - La Commission Nationale de l’Informatique et des Libertés',
+  ]),
+  authoritySnapshot('DE', ['Statistisches Bundesamt (Destatis)'], ['Bundesnetzagentur (BNetzA)'], []),
+  authoritySnapshot('EL', ['Hellenic Ministry of Digital Governance'], [], []),
+  authoritySnapshot('HU', ['The National Data Asset Agency'], ['The National Data Protection and Freedom of Information Authority'], []),
+  authoritySnapshot('IE', ['Central Statistics Office'], ['Competition and Consumer Protection Commission'], []),
+  authoritySnapshot('IT', ['l’Agenzia per l’Italia digitale (AgID)'], ['l’Agenzia per l’Italia digitale (AgID)'], []),
+  authoritySnapshot('LV', ['Ministry of Environmental Protection and Regional Development Republic of Latvia'], [], []),
+  authoritySnapshot('LT', ['The State Data Agency'], ['The State Data Protection Inspectorate'], []),
+  authoritySnapshot('LU', ['Commissariat du Gouvernement à la souveraineté des données'], ['la Commission nationale pour la protection des données (CNPD)'], []),
+  authoritySnapshot('MT', ['The Data Governance Council'], ['Malta Digital Innovation Authority'], []),
+  authoritySnapshot('NL', ['Statistics Netherlands'], ['The Authority for Consumers and Markets'], []),
+  authoritySnapshot('PL', ['the President of the Central Statistical Office'], ['the President of the Personal Data Protection Office'], []),
+  authoritySnapshot('PT', ['Agency for Administrative Modernisation'], [
+    'ANACOM - National Communications Authority',
+    'General Secretariat of the Ministry of Finance (for data in the government area of finance)',
+    'General Inspection of Agriculture, the Sea, the Environment and Spatial Planning (for data in agriculture and fisheries)',
+    'Autoridade de Segurança Alimentar e Económica (for data in the government area of the economy, within the scope of ASAE’s mission and attributions)',
+    'General Secretariat of the Ministry of the Environment (for data from the environmental government area)',
+    'Serviços Partilhados do Ministério da Saúde, SPMS (for data from the health government area, within the scope of SPMS’s mission and attributions)',
+  ], []),
+  authoritySnapshot('RO', ['The Authority for the Digitisation of Romania (ADR)'], [], []),
+  authoritySnapshot('SK', ['Ministry of Investment, Regional Development and Informatization of the Slovak Republic'], [
+    'Ministry of Investment, Regional Development and Informatization of the Slovak Republic',
+  ], [
+    'Ministry of Investment, Regional Development and Informatization of the Slovak Republic (jointly with the Office for Personal Data Protection of the Slovak Republic)',
+  ]),
+  authoritySnapshot('SI', ['Inspector for the Information Society, Ministry of Digital Transformation'], [
+    'Inspector for the Information Society, Ministry of Digital Transformation',
+  ], ['Ministry of Public Administration']),
+  authoritySnapshot('ES', [
+    'Deputy Directorate General for Planning and Governance of Digital Administration',
+    'General Secretariat for Digital Administration',
+    'State Secretariat for Digitization and Artificial Intelligence',
+    'Ministry of Economic Affairs and Digital Transformation',
+    'National Statistics Institute (for statistical data)',
+  ], [
+    'Deputy Directorate General for Digital Society',
+    'Directorate General for Digitization and Artificial Intelligence',
+    'State Secretariat for Digitization and Artificial Intelligence',
+    'Ministry of Economic Affairs and Digital Transformation',
+  ], []),
+  authoritySnapshot('SE', ['National Agency for Digital Government (Digg) and Statistics Sweden (SCB)'], ['Swedish Post and Telecom Agency (PTS)'], []),
+]
+
+const altruismRecord = (code: string, id: string, organisation: string): DataAltruismOrganisation => ({
+  id,
+  country: countries[code],
+  organisation,
+  status: 'recognised',
+  sources: [altruismSource],
+  last_verified_at: DATA_AS_OF,
+})
+
+export const DATA_ALTRUISM_ORGANISATIONS: DataAltruismOrganisation[] = [
+  altruismRecord('AT', 'altruism-at-hinterland-systems', 'Hinterland Systems'),
+  altruismRecord('BE', 'altruism-be-101-genomes', '101 Genomes'),
+  altruismRecord('BE', 'altruism-be-ebdh', 'European Brain Data Hub (EBDH)'),
+  altruismRecord('ES', 'altruism-es-datalog', 'Associació Dades pel Benestar Planetari - Datalog'),
+  altruismRecord('IE', 'altruism-ie-elec-tariffs', 'Elec-tariffs.ie'),
+  altruismRecord('IT', 'altruism-it-aida', 'Associazione Italiana Data e Analytics'),
+  altruismRecord('IT', 'altruism-it-sustainable-development-foundation', 'Sustainable Development Foundation'),
+]
+
 export const TRANSFER_WATCH: NonPersonalTransferWatch[] = [
   {
     watch_id: 'dga-article-31-public-cases',
@@ -286,6 +418,7 @@ export const TRANSFER_WATCH: NonPersonalTransferWatch[] = [
     },
     status: 'not_located',
     publicCaseCount: null,
+    cases: [],
     scopeNote: {
       zh: '监测范围：2023-09-24 至 2026-11-20 的欧委会 DGA 页面、EUR-Lex DGA 文本/摘要、官方侵权程序新闻、官方登记册和主管机关清单。当前未定位到明确指向 DGA Article 31 的具体公开执法决定；这不是“没有案件”。',
       en: 'Scope: Commission DGA pages, EUR-Lex DGA text/summary, official infringement releases, the public register and authority list from 24 September 2023 through 20 November 2026. No specific public enforcement decision expressly tied to DGA Article 31 was located; this is not a finding that no case exists.',
@@ -298,6 +431,23 @@ export const TRANSFER_WATCH: NonPersonalTransferWatch[] = [
     last_verified_at: DATA_AS_OF,
   },
 ]
+
+export const FOLLOW_UP_REVIEWS: ProcedureFollowUp[] = MATTERS.map((matter) => ({
+  id: `${matter.matter_id}-follow-up`,
+  matter_id: matter.matter_id,
+  country: matter.country,
+  status: 'not_located',
+  summary: {
+    zh: '在本次复核的官方来源范围内，未定位到该事项在当前公开阶段之后的结案、升级或法院进展信号。',
+    en: 'No closure, escalation or court signal after the current public phase was located in the reviewed official source set.',
+  },
+  nextAction: {
+    zh: '继续复核欧委会后续公告、成员国主管机关页面及法院材料；未见新公告不等于程序已结案。',
+    en: 'Review later Commission releases, national authority pages and court materials; absence of a new release is not closure.',
+  },
+  sources: matter.sources,
+  last_verified_at: DATA_AS_OF,
+}))
 
 export const TIMELINE_EVENTS: TimelineEvent[] = [
   {

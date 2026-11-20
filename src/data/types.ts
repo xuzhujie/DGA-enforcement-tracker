@@ -63,6 +63,16 @@ export interface IntermediaryRecord {
   last_verified_at: string
 }
 
+export interface Article31Case {
+  case_id: string
+  title: Bilingual
+  status: 'located' | 'pending_review'
+  date: string | null
+  summary: Bilingual
+  sources: SourceRef[]
+  last_verified_at: string
+}
+
 export interface NonPersonalTransferWatch {
   watch_id: string
   track: 'non_personal_transfer'
@@ -71,7 +81,40 @@ export interface NonPersonalTransferWatch {
   rule: Bilingual
   status: VerificationStatus
   publicCaseCount: number | null
+  cases: Article31Case[]
   scopeNote: Bilingual
+  nextAction: Bilingual
+  sources: SourceRef[]
+  last_verified_at: string
+}
+
+export interface AuthoritySnapshot {
+  id: string
+  country: CountryRef
+  competentBody: string[]
+  dataIntermediation: string[]
+  dataAltruism: string[]
+  sourceUpdatedAt: string
+  note?: Bilingual
+  sources: SourceRef[]
+  last_verified_at: string
+}
+
+export interface DataAltruismOrganisation {
+  id: string
+  country: CountryRef
+  organisation: string
+  status: 'recognised'
+  sources: SourceRef[]
+  last_verified_at: string
+}
+
+export interface ProcedureFollowUp {
+  id: string
+  matter_id: string
+  country: CountryRef
+  status: 'located' | 'not_located' | 'pending_review'
+  summary: Bilingual
   nextAction: Bilingual
   sources: SourceRef[]
   last_verified_at: string

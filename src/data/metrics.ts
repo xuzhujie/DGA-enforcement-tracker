@@ -1,9 +1,12 @@
 import type {
+  AuthoritySnapshot,
+  DataAltruismOrganisation,
   DgaMatter,
   IntermediaryRecord,
   MatterFilters,
   MatterPhase,
   NonPersonalTransferWatch,
+  ProcedureFollowUp,
 } from './types'
 
 export interface DashboardMetrics {
@@ -24,6 +27,14 @@ export interface MatterMetrics {
 export interface IntermediaryMetrics {
   providerCount: number
   countryCount: number
+}
+
+export interface GovernanceMetrics {
+  authorityCountryCount: number
+  dataAltruismOrganisationCount: number
+  dataAltruismCountryCount: number
+  followUpReviewCount: number
+  article31LocatedCaseCount: number
 }
 
 export function getDashboardMetrics(
@@ -54,6 +65,21 @@ export function getIntermediaryMetrics(intermediaries: IntermediaryRecord[]): In
   return {
     providerCount: intermediaries.length,
     countryCount: new Set(intermediaries.map((item) => item.country.code)).size,
+  }
+}
+
+export function getGovernanceMetrics(
+  authorities: AuthoritySnapshot[],
+  organisations: DataAltruismOrganisation[],
+  followUps: ProcedureFollowUp[],
+  transferWatch: NonPersonalTransferWatch[],
+): GovernanceMetrics {
+  return {
+    authorityCountryCount: new Set(authorities.map((item) => item.country.code)).size,
+    dataAltruismOrganisationCount: organisations.length,
+    dataAltruismCountryCount: new Set(organisations.map((item) => item.country.code)).size,
+    followUpReviewCount: followUps.length,
+    article31LocatedCaseCount: transferWatch.reduce((total, item) => total + item.cases.filter((item) => item.status === 'located').length, 0),
   }
 }
 
