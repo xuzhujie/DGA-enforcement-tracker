@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "test": "tsx --test",
+    "test:e2e": "playwright test",
     "validate:data": "tsx scripts/validate_registry.ts",
     "build": "tsc -b && vite build",
     "lint": "tsc -b",
@@ -18,6 +19,7 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",

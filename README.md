@@ -26,8 +26,9 @@ DGA 是欧盟的数据治理横向法规，自 2023-09-24 起适用。它围绕�
 - `src/data/metrics.ts`、`src/lib/filters.ts`、`src/lib/export.ts`：指标、筛选和当前视图 JSON/CSV/Markdown 导出。
 - `public/data/updates.json`：有界的官方动态 feed；主登记不由脚本自动更新。
 - `scripts/check_updates.py`：仅使用 Python 标准库，读取欧委会 Press Corner RSS 和 allowlisted Digital Strategy DGA 页面，筛选 DGA 相关关键词并按链接去重/刷新。
+- `playwright.config.ts`、`tests/e2e/`：桌面和窄屏 Chromium 冒烟测试，验证 DGA 定义、治理基础设施、Article 31 证据边界和移动端不横向溢出。
 - `public/static/index.html`：适合分享/打印的静态速览页。
-- `.github/workflows/deploy.yml`：Node 22、测试、Python 测试、lint、构建并发布 GitHub Pages。
+- `.github/workflows/deploy.yml`：Node 22、单元/数据/Python 测试、桌面/窄屏浏览器冒烟、lint、构建并发布 GitHub Pages。
 - `.github/workflows/monitor.yml`：每天 UTC 06:17 运行，只有 feed 有变化时才提交 `public/data/updates.json`，并写入 Actions Summary。
 
 ## 本地运行
@@ -36,6 +37,7 @@ DGA 是欧盟的数据治理横向法规，自 2023-09-24 起适用。它围绕�
 npm ci
 npm run dev
 npm test
+npm run test:e2e
 npm run validate:data
 python3 -m unittest discover -s tests -v
 npm run lint
