@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-20T00:00:00+08:00",
+  "updated_at": "2026-11-20T15:15:20+00:00",
   "source": "https://ec.europa.eu/commission/presscorner/api/rss?language=en",
   "items": [
     {
@@ -11,20 +11,32 @@
       "summary_zh": "欧委会将捷克、德国、爱沙尼亚、希腊、塞浦路斯、卢森堡、奥地利、波兰、葡萄牙和斯洛文尼亚推进至 reasoned opinion 阶段。"
     },
     {
-      "title": "Commission calls on 18 Member States to comply with the Data Governance Act",
-      "title_zh": "欧委会要求 18 个成员国指定《数据治理法》主管机关",
-      "link": "https://digital-strategy.ec.europa.eu/en/news/commission-calls-18-member-states-comply-eu-data-governance-act",
-      "date": "2024-05-23",
-      "summary": "The Commission opened formal infringement procedures over the designation or empowerment of national DGA authorities.",
-      "summary_zh": "欧委会因成员国主管机关指定或授权问题，对 18 个成员国启动 formal notice 程序。"
-    },
-    {
       "title": "Commission calls on Ireland to comply with the Data Governance Act",
       "title_zh": "欧委会要求爱尔兰遵守《数据治理法》",
       "link": "https://digital-strategy.ec.europa.eu/en/news/commission-calls-ireland-comply-eu-data-governance-act",
       "date": "2024-07-25",
       "summary": "Ireland received a formal notice concerning the designation of competent authorities under the DGA.",
       "summary_zh": "爱尔兰因 DGA 主管机关指定问题收到 formal notice。"
+    },
+    {
+      "title": "Commission calls on 18 Member States to comply with the EU Data Governance Act | Shaping Europe’s digital future",
+      "title_zh": "欧委会要求 18 个成员国指定《数据治理法》主管机关",
+      "link": "https://digital-strategy.ec.europa.eu/en/news/commission-calls-18-member-states-comply-eu-data-governance-act",
+      "date": "",
+      "summary": "The European Commission decided to open infringement procedures by sending a letter of formal notice to 18 Member States that did not designate the responsible authorities to implement the Data Governance Act, or that have failed to prove that the latter are empowered to perform the tasks required by the Act.",
+      "summary_zh": "欧委会因成员国主管机关指定或授权问题，对 18 个成员国启动 formal notice 程序。"
+    },
+    {
+      "title": "Data Governance Act explained | Shaping Europe’s digital future",
+      "link": "https://digital-strategy.ec.europa.eu/en/policies/data-governance-act-explained",
+      "date": "",
+      "summary": "The Data Governance Act provides a framework to enhance trust in voluntary data sharing for the benefit of businesses and citizens."
+    },
+    {
+      "title": "EU register of data intermediation services | Shaping Europe’s digital future",
+      "link": "https://digital-strategy.ec.europa.eu/en/policies/data-intermediary-services",
+      "date": "",
+      "summary": "The DGA creates a framework to foster a new business model – data intermediation services – that will provide a trusted and secure environment in which companies or individuals can share data."
     }
   ]
 }
