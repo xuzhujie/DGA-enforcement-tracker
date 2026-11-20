@@ -1,0 +1,41 @@
+name: Official signal review
+description: Submit an official DGA source for human review.
+title: "[review] "
+labels:
+  - data-review
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Official source URL
+      description: Use EUR-Lex, the European Commission, a national competent authority, or court material.
+    validations:
+      required: true
+  - type: textarea
+    id: signal
+    attributes:
+      label: What does the source say?
+      description: Summarise the specific fact, date, country, organisation, or procedure signal without inferring a legal conclusion.
+    validations:
+      required: true
+  - type: dropdown
+    id: track
+    attributes:
+      label: DGA track
+      options:
+        - Implementation procedure
+        - Data intermediation
+        - Data altruism
+        - National authority
+        - Article 31 non-personal data
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Review constraints
+      options:
+        - label: I checked the original source, not only an RSS or search snippet.
+          required: true
+        - label: I am not treating missing evidence as zero or closure.
+          required: true

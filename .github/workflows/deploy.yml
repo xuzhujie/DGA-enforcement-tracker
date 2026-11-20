@@ -27,6 +27,7 @@ jobs:
 
       - run: npm ci
       - run: npm test
+      - run: npm run validate:data
       - run: python3 -m unittest discover -s tests -v
       - run: npm run lint
       - run: npm run build

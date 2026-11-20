@@ -13,12 +13,16 @@ DGA 是欧盟的数据治理横向法规，自 2023-09-24 起适用。它围绕�
 - **19 个实施程序事项**：每个成员国一条 reviewed 记录；含 formal notice / reasoned opinion 事件和来源。
 - **10 个 reasoned opinion**：截至当前官方 source set 已公开定位到的阶段，不推断后续结案。
 - **41 条数据中介登记**：欧委会公开登记册快照；登记不是合规认证、处罚或案件数量。
+- **27 个成员国主管机关快照**：欧委会清单截至 2026-09-15 的日期化记录，Art. 7 / Art. 13 / Art. 23 分列；空白列保持“未列出”。
+- **7 个已获认可的数据利他组织**：欧委会公开登记册截至 2026-07-23 的通知记录，独立于数据中介登记和实施程序。
+- **19 条后续状态复核**：逐事项记录结案、升级或法院信号；当前 source set 未定位到后续信号不等于已结案。
 - **Article 31：未定位到**：当前复核的官方来源中未找到明确将具体公开执法决定系于 Article 31 的个案；这不是“没有案件”的断言。
 - **官方动态 feed**：GitHub Actions 只刷新 `public/data/updates.json`，作为待复核信号，不自动改写主登记。
 
 ## 项目交付
 
 - `src/data/registry.ts`：人工核验的 typed reviewed registry，保存事项、事件、登记服务、Article 31 观察、来源和复核日期。
+- `src/data/validation.ts`、`scripts/validate_registry.ts`：校验记录 ID、官方来源、复核日期、关联事项和 Article 31 not_located 语义。
 - `src/data/metrics.ts`、`src/lib/filters.ts`、`src/lib/export.ts`：指标、筛选和当前视图 JSON/CSV/Markdown 导出。
 - `public/data/updates.json`：有界的官方动态 feed；主登记不由脚本自动更新。
 - `scripts/check_updates.py`：仅使用 Python 标准库，读取欧委会 Press Corner RSS 和 allowlisted Digital Strategy DGA 页面，筛选 DGA 相关关键词并按链接去重/刷新。
@@ -32,6 +36,7 @@ DGA 是欧盟的数据治理横向法规，自 2023-09-24 起适用。它围绕�
 npm ci
 npm run dev
 npm test
+npm run validate:data
 python3 -m unittest discover -s tests -v
 npm run lint
 npm run build
@@ -46,7 +51,7 @@ python3 scripts/check_updates.py --feed-file /path/to/feed.xml --dry-run
 
 ## 数据和来源政策
 
-主登记只在人工核验官方来源后修改。每条事项/登记服务保留来源 URL、证据摘要和 `last_verified_at`；动态脚本不推断罚款、结案、持续状态或法律结论。
+主登记只在人工核验官方来源后修改。每条事项、登记服务、主管机关和数据利他组织保留来源 URL、证据摘要和 last_verified_at；动态脚本不推断罚款、结案、持续状态或法律结论。详细流程见 CONTRIBUTING.md。
 
 核心来源：
 
@@ -55,6 +60,7 @@ python3 scripts/check_updates.py --feed-file /path/to/feed.xml --dry-run
 - [欧委会：Data Governance Act explained](https://digital-strategy.ec.europa.eu/en/policies/data-governance-act-explained)
 - [欧委会：国家主管机关清单](https://digital-strategy.ec.europa.eu/en/library/national-competent-bodies-and-authorities-under-data-governance-act)
 - [欧委会：数据中介服务登记册](https://digital-strategy.ec.europa.eu/en/policies/data-intermediary-services)
+- [欧委会：数据利他组织登记册](https://digital-strategy.ec.europa.eu/en/policies/data-altruism-organisations)
 - [欧委会：18 个成员国 formal notice](https://digital-strategy.ec.europa.eu/en/news/commission-calls-18-member-states-comply-eu-data-governance-act)
 - [欧委会：10 个成员国 reasoned opinion](https://digital-strategy.ec.europa.eu/en/news/commission-calls-10-member-states-comply-data-governance-act)
 - [欧委会：爱尔兰 formal notice](https://digital-strategy.ec.europa.eu/en/news/commission-calls-ireland-comply-eu-data-governance-act)
@@ -64,6 +70,8 @@ python3 scripts/check_updates.py --feed-file /path/to/feed.xml --dry-run
 ## GitHub Pages 与通知
 
 首次部署时，在仓库 Settings → Pages → Source 选择 **GitHub Actions**；如果 Pages 尚未启用，Actions 无法代替账号创建站点，需先完成这一步。推送到 `main` 会触发构建发布；每日监测默认只写 Actions Summary 和 feed 文件。
+
+要让每日 monitor 在 feed 变化时自动提交，请在 Settings → Actions → General → Workflow permissions 选择 **Read and write permissions**。启用后可在 Actions → DGA official update monitor → Run workflow 手动验证一次。
 
 如需通知，可配置 Actions secret `NOTIFY_WEBHOOK_URL` 与 variable `NOTIFY_WEBHOOK_KIND`（`discord`、`feishu` 或通用 JSON）。通知失败不会阻断 feed 提交。不要把 webhook 地址写进仓库。
 

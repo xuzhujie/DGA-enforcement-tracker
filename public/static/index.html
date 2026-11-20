@@ -13,7 +13,7 @@
     .eyebrow { color:#b8d7f3; font-size:13px; letter-spacing:.03em; }
     h1 { margin:8px 0 10px; font-size:34px; letter-spacing:-.03em; }
     header p { max-width:760px; margin:0; color:#dbeafe; }
-    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:28px; }
+    .stats { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-top:28px; }
     .stat { padding:15px 16px; border:1px solid rgba(255,255,255,.16); border-radius:12px; background:rgba(255,255,255,.1); }
     .stat small { display:block; color:#b8d7f3; }
     .stat strong { display:block; margin-top:2px; font-size:27px; }
@@ -52,6 +52,8 @@
         <div class="stat"><small>实施程序事项</small><strong>19</strong><small>每个成员国一条 reviewed 记录</small></div>
         <div class="stat"><small>Reasoned opinion</small><strong>10</strong><small>截至当前官方 source set</small></div>
         <div class="stat"><small>数据中介登记</small><strong>41</strong><small>登记册快照，不等于合规认证</small></div>
+        <div class="stat"><small>主管机关快照</small><strong>27</strong><small>欧委会清单更新 2026-09-15</small></div>
+        <div class="stat"><small>数据利他组织</small><strong>7</strong><small>欧委会登记更新 2026-07-23</small></div>
         <div class="stat"><small>Article 31 个案</small><strong>未定位到</strong><small>不是“零案件”的断言</small></div>
       </div>
     </div>
@@ -81,11 +83,22 @@
       </div>
     </section>
     <section>
+      <h2>治理基础设施与后续复核</h2>
+      <p class="sub">主管机关是日期化官方快照；后续状态未定位到不等于程序已结案。</p>
+      <div class="grid">
+        <article class="card"><h3>国家主管机关</h3><div class="metric">27</div><p>按 Art. 7、Art. 13、Art. 23 分列，空白列保持“未列出”。</p></article>
+        <article class="card"><h3>数据利他组织</h3><div class="metric teal">7</div><p>欧委会公开的 recognised data altruism organisations 通知记录。</p></article>
+        <article class="card"><h3>后续状态检查</h3><div class="metric amber">19</div><p>逐事项检查结案、升级或法院信号，未把缺失证据写成 0。</p></article>
+      </div>
+    </section>
+    <section>
       <h2>官方来源</h2>
       <div class="sources">
         <a class="source" href="https://eur-lex.europa.eu/eli/reg/2022/868/oj" target="_blank" rel="noreferrer">EUR-Lex · DGA 正文<span>Regulation (EU) 2022/868</span></a>
         <a class="source" href="https://digital-strategy.ec.europa.eu/en/policies/data-governance-act-explained" target="_blank" rel="noreferrer">欧委会 · DGA explained<span>政策机制说明</span></a>
         <a class="source" href="https://digital-strategy.ec.europa.eu/en/policies/data-intermediary-services" target="_blank" rel="noreferrer">欧委会 · 数据中介登记<span>公开登记册入口</span></a>
+        <a class="source" href="https://digital-strategy.ec.europa.eu/en/policies/data-altruism-organisations" target="_blank" rel="noreferrer">欧委会 · 数据利他登记<span>公开认可组织入口</span></a>
+        <a class="source" href="https://digital-strategy.ec.europa.eu/en/library/national-competent-bodies-and-authorities-under-data-governance-act" target="_blank" rel="noreferrer">欧委会 · 主管机关清单<span>按成员国的官方快照</span></a>
       </div>
     </section>
   </main>
