@@ -1,15 +1,7 @@
 {
-  "updated_at": "2026-11-20T15:28:52+00:00",
+  "updated_at": "2026-11-28T15:33:33+00:00",
   "source": "https://ec.europa.eu/commission/presscorner/api/rss?language=en",
   "items": [
-    {
-      "title": "Commission calls on 10 Member States to comply with the Data Governance Act",
-      "title_zh": "欧委会要求 10 个成员国遵守《数据治理法》",
-      "link": "https://digital-strategy.ec.europa.eu/en/news/commission-calls-10-member-states-comply-data-governance-act",
-      "date": "2024-12-16",
-      "summary": "The Commission moved Czechia, Germany, Estonia, Greece, Cyprus, Luxembourg, Austria, Poland, Portugal and Slovenia to the reasoned-opinion stage.",
-      "summary_zh": "欧委会将捷克、德国、爱沙尼亚、希腊、塞浦路斯、卢森堡、奥地利、波兰、葡萄牙和斯洛文尼亚推进至 reasoned opinion 阶段。"
-    },
     {
       "title": "Commission calls on Ireland to comply with the Data Governance Act",
       "title_zh": "欧委会要求爱尔兰遵守《数据治理法》",
@@ -17,6 +9,14 @@
       "date": "2024-07-25",
       "summary": "Ireland received a formal notice concerning the designation of competent authorities under the DGA.",
       "summary_zh": "爱尔兰因 DGA 主管机关指定问题收到 formal notice。"
+    },
+    {
+      "title": "Commission calls on 10 Member States to comply with the Data Governance Act | Shaping Europe’s digital future",
+      "title_zh": "欧委会要求 10 个成员国遵守《数据治理法》",
+      "link": "https://digital-strategy.ec.europa.eu/en/news/commission-calls-10-member-states-comply-data-governance-act",
+      "date": "",
+      "summary": "The European Commission decided to send a reasoned opinion to Czechia (INFR(2024)2057), Germany (INFR(2024)2060), Estonia (INFR(2024)2058), Greece (INFR(2024)2061), Cyprus (INFR(2024)2056), Luxembourg (INFR(2024)2063), Austria (INFR(2024)2054), Poland (INFR(2024)2066), Portugal (INFR(2024)2067), and Slovenia (INFR(2024)2070), as these Member States did not d",
+      "summary_zh": "欧委会将捷克、德国、爱沙尼亚、希腊、塞浦路斯、卢森堡、奥地利、波兰、葡萄牙和斯洛文尼亚推进至 reasoned opinion 阶段。"
     },
     {
       "title": "Commission calls on 18 Member States to comply with the EU Data Governance Act | Shaping Europe’s digital future",
